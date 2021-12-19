@@ -49,10 +49,8 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm -rf composer-setup.php
 
 # Configure supervisor
-RUN mkdir -p /etc/supervisor.d/
-COPY supervisor/supervisord.ini /etc/supervisor.d/supervisord.ini
+COPY supervisor/supervisord.conf /etc/supervisord.conf
 RUN mkdir -p /run/supervisor/
-RUN touch /run/supervisor/supervisor.pid
 
 # Configure PHP
 RUN mkdir -p /run/php/
@@ -85,4 +83,4 @@ RUN chown -R www-data:www-data /var/log/nginx && \
     chown -R www-data:www-data /var/lib/php8
 
 EXPOSE 80
-CMD ["supervisord", "-c", "/etc/supervisor.d/supervisord.ini"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
