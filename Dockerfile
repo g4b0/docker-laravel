@@ -6,12 +6,15 @@ ARG WWWGID
 WORKDIR /var/www/html/
 
 # Adding ticketsms user
-RUN addgroup -S -g $WWWGID ticketsms \
- && adduser -S -D -u $WWWUID -s /sbin/nologin -h /var/www -G ticketsms ticketsms
+# RUN addgroup -S -g $WWWGID ticketsms && \
+#     adduser -S -D -u $WWWUID -s /sbin/nologin -h /var/www -G ticketsms ticketsms
 
 # Essentials
+# nginx creates www-data group, but not the www-data user
 RUN echo "Europe/Rome" > /etc/timezone
-RUN apk add --no-cache zip unzip curl sqlite nginx supervisor
+RUN apk add --no-cache zip unzip curl sqlite nginx supervisor shadow && \
+    groupmod -g $WWWGID www-data && \
+    adduser -S -D -u $WWWUID -s /sbin/nologin -h /var/www -G www-data www-data
 
 # Installing bash
 RUN apk add bash
@@ -70,6 +73,17 @@ RUN touch /run/nginx/nginx.pid
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log
 RUN ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Grant write access to /dev/pts/0  (/dev/stdin && /dev/stdout && /dev/stderr)
+RUN addgroup www-data tty
+
+# Set permissions for non priviliged user
+RUN chown -R www-data:www-data /var/log/nginx && \
+    chown -R www-data:www-data /var/log/php8 && \
+    chown -R www-data:www-data /run/nginx && \
+    chown -R www-data:www-data /run/php && \
+    chown -R www-data:www-data /var/lib/nginx && \
+    chown -R www-data:www-data /var/lib/php8
 
 # Building process
 #COPY . .
