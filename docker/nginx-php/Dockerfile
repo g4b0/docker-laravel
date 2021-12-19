@@ -1,13 +1,9 @@
-FROM alpine:latest
+FROM alpine:3.15
 
-ARG WWWUID
-ARG WWWGID
+ARG WWWUID=1000
+ARG WWWGID=1000
 
 WORKDIR /var/www/html/
-
-# Adding ticketsms user
-# RUN addgroup -S -g $WWWGID ticketsms && \
-#     adduser -S -D -u $WWWUID -s /sbin/nologin -h /var/www -G ticketsms ticketsms
 
 # Essentials
 # nginx creates www-data group, but not the www-data user
@@ -54,19 +50,21 @@ RUN rm -rf composer-setup.php
 
 # Configure supervisor
 RUN mkdir -p /etc/supervisor.d/
-COPY .docker/supervisord.ini /etc/supervisor.d/supervisord.ini
+COPY supervisor/supervisord.ini /etc/supervisor.d/supervisord.ini
+RUN mkdir -p /run/supervisor/
+RUN touch /run/supervisor/supervisor.pid
 
 # Configure PHP
 RUN mkdir -p /run/php/
 RUN touch /run/php/php8.0-fpm.pid
 
-COPY .docker/php-fpm.conf /etc/php8/php-fpm.conf
-COPY .docker/www.conf /etc/php8/php-fpm.d/www.conf
-COPY .docker/php.ini-production /etc/php8/php.ini
+COPY php/php-fpm.conf /etc/php8/php-fpm.conf
+COPY php/www.conf /etc/php8/php-fpm.d/www.conf
+COPY php/php.ini-production /etc/php8/php.ini
 
 # Configure nginx
-COPY .docker/nginx.conf /etc/nginx/
-COPY .docker/nginx-laravel.conf /etc/nginx/modules/
+COPY nginx/nginx.conf /etc/nginx/
+COPY nginx/nginx-laravel.conf /etc/nginx/modules/
 
 RUN mkdir -p /run/nginx/
 RUN touch /run/nginx/nginx.pid
@@ -82,13 +80,9 @@ RUN chown -R www-data:www-data /var/log/nginx && \
     chown -R www-data:www-data /var/log/php8 && \
     chown -R www-data:www-data /run/nginx && \
     chown -R www-data:www-data /run/php && \
+    chown -R www-data:www-data /run/supervisor && \
     chown -R www-data:www-data /var/lib/nginx && \
     chown -R www-data:www-data /var/lib/php8
-
-# Building process
-#COPY . .
-#RUN composer install --no-dev
-#RUN chown -R nobody:nobody /var/www/html
 
 EXPOSE 80
 CMD ["supervisord", "-c", "/etc/supervisor.d/supervisord.ini"]
