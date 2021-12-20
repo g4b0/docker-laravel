@@ -1,6 +1,5 @@
 FROM alpine:3.15
 
-ARG WWWUID=1000
 ARG WWWGID=1000
 
 WORKDIR /var/www/html/
@@ -10,7 +9,7 @@ WORKDIR /var/www/html/
 RUN echo "Europe/Rome" > /etc/timezone
 RUN apk add --no-cache zip unzip curl sqlite nginx supervisor shadow && \
     groupmod -g $WWWGID www-data && \
-    adduser -S -D -u $WWWUID -s /sbin/nologin -h /var/www -G www-data www-data
+    adduser -S -D -u 82 -s /sbin/nologin -h /var/www -G www-data www-data
 
 # Installing bash
 RUN apk add bash
