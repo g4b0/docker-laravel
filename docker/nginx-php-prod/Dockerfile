@@ -58,7 +58,7 @@ COPY docker/conf/php/php.ini-prod /etc/php8/php.ini
 
 # Configure nginx
 COPY docker/conf/nginx/nginx.conf /etc/nginx/
-COPY docker/conf/nginx/nginx-laravel.conf /etc/nginx/modules/
+COPY docker/conf/nginx/nginx-laravel-prod.conf /etc/nginx/modules/
 
 RUN mkdir -p /run/nginx/
 RUN touch /run/nginx/nginx.pid
