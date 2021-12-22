@@ -74,3 +74,7 @@ Dev will run a more relaxed php.ini and will report all errors, including deprec
 Once you did the first build you can easly start dev and prod container with the two scripts
 * up-dev.sh
 * up-prod.sh
+
+If you switch between dev and prod it is necessary to rebuild the container each time, in order to match www-data uid and gid with the ones specified in docker-compose-*.yml file. You can easly do it with the two scripts
+* build-up-dev.sh
+* build-up-prod.sh

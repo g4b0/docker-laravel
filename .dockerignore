@@ -8,5 +8,7 @@ vendor
 docker-*
 phpunit.xml
 README.md
+build-up-dev.sh
+build-up-prod.sh
 up-dev.sh
 up-prod.sh
