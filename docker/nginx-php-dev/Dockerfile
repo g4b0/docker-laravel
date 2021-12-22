@@ -1,19 +1,20 @@
 FROM alpine:3.15
 
+ARG WWWUID=1000
 ARG WWWGID=1000
 
 WORKDIR /var/www/html/
 
-# Essentials
-# nginx creates www-data group, but not the www-data user
-RUN echo "Europe/Rome" > /etc/timezone
-RUN apk add --no-cache zip unzip curl sqlite nginx supervisor shadow && \
-    groupmod -g $WWWGID www-data && \
-    adduser -S -D -u 82 -s /sbin/nologin -h /var/www -G www-data www-data
-
 # Installing bash
 RUN apk add bash
 RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
+
+# Essentials
+# nginx creates www-data group, but not the www-data user
+RUN echo "Europe/Rome" > /etc/timezone
+RUN apk add --no-cache zip unzip curl sqlite nginx supervisor shadow git && \
+    groupmod -g $WWWGID www-data && \
+    adduser -S -D -u $WWWUID -s /bin/bash -h /var/www -G www-data www-data
 
 # Installing PHP
 RUN apk add --no-cache php8 \
@@ -38,7 +39,8 @@ RUN apk add --no-cache php8 \
     php8-pdo_mysql \
     php8-pdo_sqlite \
     php8-tokenizer \
-    php8-pecl-redis
+    php8-pecl-redis \
+    php8-pecl-xdebug
 
 RUN ln -s /usr/bin/php8 /usr/bin/php
 
@@ -48,20 +50,20 @@ RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm -rf composer-setup.php
 
 # Configure supervisor
-COPY supervisor/supervisord.conf /etc/supervisord.conf
+COPY docker/conf/supervisor/supervisord.conf /etc/supervisord.conf
 RUN mkdir -p /run/supervisor/
 
 # Configure PHP
 RUN mkdir -p /run/php/
 RUN touch /run/php/php8.0-fpm.pid
 
-COPY php/php-fpm.conf /etc/php8/php-fpm.conf
-COPY php/www.conf /etc/php8/php-fpm.d/www.conf
-COPY php/php.ini-production /etc/php8/php.ini
+COPY docker/conf/php/php-fpm.conf /etc/php8/php-fpm.conf
+COPY docker/conf/php/www.conf /etc/php8/php-fpm.d/www.conf
+COPY docker/conf/php/php.ini-production /etc/php8/php.ini
 
 # Configure nginx
-COPY nginx/nginx.conf /etc/nginx/
-COPY nginx/nginx-laravel.conf /etc/nginx/modules/
+COPY docker/conf/nginx/nginx.conf /etc/nginx/
+COPY docker/conf/nginx/nginx-laravel.conf /etc/nginx/modules/
 
 RUN mkdir -p /run/nginx/
 RUN touch /run/nginx/nginx.pid

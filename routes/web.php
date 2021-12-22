@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/info', function () {
+    phpinfo();
+});
+Route::get('/test', function () {
+    echo match(2) {
+        1 => "uno",
+        2 => "due"
+    };
+});
