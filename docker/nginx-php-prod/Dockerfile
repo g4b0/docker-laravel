@@ -1,7 +1,5 @@
 FROM alpine:3.15
 
-ARG WWWGID=1000
-
 WORKDIR /var/www/html/
 
 # Installing bash
@@ -11,8 +9,7 @@ RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
 # Essentials
 # nginx creates www-data group, but not the www-data user
 RUN echo "Europe/Rome" > /etc/timezone
-RUN apk add --no-cache zip unzip curl sqlite nginx supervisor shadow && \
-    groupmod -g $WWWGID www-data && \
+RUN apk add --no-cache zip unzip curl sqlite nginx supervisor && \
     adduser -S -D -u 82 -s /sbin/nologin -h /var/www -G www-data www-data
 
 # Installing PHP
@@ -57,7 +54,7 @@ RUN touch /run/php/php8.0-fpm.pid
 
 COPY docker/conf/php/php-fpm.conf /etc/php8/php-fpm.conf
 COPY docker/conf/php/www.conf /etc/php8/php-fpm.d/www.conf
-COPY docker/conf/php/php.ini-production /etc/php8/php.ini
+COPY docker/conf/php/php.ini-prod /etc/php8/php.ini
 
 # Configure nginx
 COPY docker/conf/nginx/nginx.conf /etc/nginx/
@@ -83,6 +80,7 @@ RUN chown -R www-data:www-data /var/log/nginx && \
 	
 # Building process
 COPY . .
+RUN rm -rf /var/www/html/docker
 RUN composer install --no-dev
 RUN chown -R nobody:www-data /var/www/html
 RUN chmod -R g+w /var/www/html/storage

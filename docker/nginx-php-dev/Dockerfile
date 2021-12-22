@@ -59,7 +59,7 @@ RUN touch /run/php/php8.0-fpm.pid
 
 COPY docker/conf/php/php-fpm.conf /etc/php8/php-fpm.conf
 COPY docker/conf/php/www.conf /etc/php8/php-fpm.d/www.conf
-COPY docker/conf/php/php.ini-production /etc/php8/php.ini
+COPY docker/conf/php/php.ini-dev /etc/php8/php.ini
 
 # Configure nginx
 COPY docker/conf/nginx/nginx.conf /etc/nginx/

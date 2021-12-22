@@ -1,0 +1,12 @@
+.devcontainer
+.git*
+tests
+vendor
+.dockerignore
+.editorconfig
+.env.example
+docker-*
+phpunit.xml
+README.md
+up-dev.sh
+up-prod.sh
