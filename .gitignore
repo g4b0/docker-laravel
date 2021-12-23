@@ -16,3 +16,4 @@ yarn-error.log
 /.devcontainer
 /supervisord.log
 /supervisord.pid
+/*code-workspace
