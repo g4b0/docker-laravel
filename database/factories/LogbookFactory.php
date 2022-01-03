@@ -14,7 +14,13 @@ class LogbookFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),    
+            'email' => $this->faker->email(),
+            'telephone' => $this->faker->e164PhoneNumber(),
+            'privacy' => 1,
+            'privacy_marketing' => rand(0,1),
+            'privacy_third_party' => rand(0,1),
         ];
     }
 }
