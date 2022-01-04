@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Logbook;
+use App\Models\LogbookRecord;
 use App\Models\Campaign;
 use Illuminate\Database\Seeder;
 
@@ -17,10 +17,10 @@ class LogbookSeeder extends Seeder
     {
         $campaigns = Campaign::all();
         $campaigns->each(function($campaign) {
-            $logbooks = Logbook::factory()
+            $logbooks = LogbookRecord::factory()
                 ->count(rand(5,15))
                 ->make();
-            $campaign->logbooks()->saveMany($logbooks);
+            $campaign->logbookRecords()->saveMany($logbooks);
         });
     }
 }

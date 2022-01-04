@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Landing;
-use App\Models\Logbook;
+use App\Models\LogbookRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,8 +22,8 @@ class Campaign extends Model
     /**
      * Get the campaign users
      */
-    public function logbooks()
+    public function logbookRecords()
     {
-        return $this->hasMany(Logbook::class);
+        return $this->hasMany(LogbookRecord::class);
     }
 }

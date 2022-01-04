@@ -6,7 +6,7 @@ use App\Models\Campaign;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Logbook extends Model
+class LogbookRecord extends Model
 {
     use HasFactory;
 
