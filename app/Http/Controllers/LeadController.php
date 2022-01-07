@@ -36,17 +36,15 @@ class LeadController extends Controller
      */
     public function store(LeadAddRequest $request)
     {
-        //$request->validate();
-
         $logbookRecord = new LogbookRecord;
         $logbookRecord->first_name = $request->input('first_name');
         $logbookRecord->last_name = $request->input('last_name');
         $logbookRecord->email = $request->input('email');
-        $logbookRecord->telephone = $request->input('telepone');
+        $logbookRecord->telephone = $request->input('telephone');
         $logbookRecord->privacy = $request->input('privacy');
         $logbookRecord->privacy_marketing = $request->input('privacy_marketing');
         $logbookRecord->privacy_third_party = $request->input('privacy_third_party');
-
+        $logbookRecord->campaign_id = $request->input('campaign_id');
         $logbookRecord->save();
         
         return response()->json(['success' => 'Lead succesfully inserted'], 200);
