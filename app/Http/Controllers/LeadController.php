@@ -48,8 +48,8 @@ class LeadController extends Controller
         $logbookRecord->email = $request->input('email');
         $logbookRecord->telephone = $request->input('telephone');
         $logbookRecord->privacy = $request->input('privacy');
-        $logbookRecord->privacy_marketing = $request->input('privacy_marketing');
-        $logbookRecord->privacy_third_party = $request->input('privacy_third_party');
+        $logbookRecord->privacy_marketing = $request->input('privacy_marketing')??false;
+        $logbookRecord->privacy_third_party = $request->input('privacy_third_party')??false;
         $logbookRecord->campaign_id = $request->input('campaign_id');
         $logbookRecord->save();
         
