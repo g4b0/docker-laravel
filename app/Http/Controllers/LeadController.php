@@ -8,6 +8,12 @@ use App\Http\Requests\LeadAddRequest;
 
 class LeadController extends Controller
 {
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
+    
     /**
      * Display a listing of the resource.
      *
@@ -93,5 +99,15 @@ class LeadController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Return a random lead
+     *
+     * @return void
+     */
+    public function random()
+    {
+        return LogbookRecord::inRandomOrder()->first();
     }
 }
