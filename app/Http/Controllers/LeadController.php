@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LogbookRecord;
+use App\Jobs\DeduplicationByEmail;
 use App\Http\Requests\LeadAddRequest;
 
 class LeadController extends Controller
@@ -52,6 +53,8 @@ class LeadController extends Controller
         $logbookRecord->privacy_third_party = $request->input('privacy_third_party')??false;
         $logbookRecord->campaign_id = $request->input('campaign_id');
         $logbookRecord->save();
+        
+        DeduplicationByEmail::dispatch($logbookRecord);
         
         return response()->json(['success' => 'Lead succesfully inserted'], 200);
     }

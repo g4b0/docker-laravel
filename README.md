@@ -78,3 +78,15 @@ Once you did the first build you can easly start dev and prod container with the
 If you switch between dev and prod it is necessary to rebuild the container each time, in order to match www-data uid and gid with the ones specified in docker-compose-*.yml file. You can easly do it with the two scripts
 * build-up-dev.sh
 * build-up-prod.sh
+
+
+## Userland
+
+Userland is a demo application for testing Larvel in this containerized environment. To initialize it, once the container are running, there are some step 
+
+```bash
+php artisan migrate:fresh --seed
+php artisan deduplication:init
+php artisan queue:work
+php artisan test
+```
