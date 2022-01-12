@@ -1,6 +1,6 @@
 version: '3'
 services:
-    nignx-php:
+    nginx-php:
         build:
             context: .
             dockerfile: docker/nginx-php-dev/Dockerfile
